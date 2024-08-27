@@ -1,0 +1,6 @@
+{
+  "poolSize": 20,
+  "rateLimitDelay": 5000,
+  "savingInterval": 30000,
+  "mongoUri": "mongodb://localhost:27017"
+}
