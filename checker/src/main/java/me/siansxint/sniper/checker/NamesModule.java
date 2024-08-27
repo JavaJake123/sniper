@@ -4,7 +4,6 @@ import me.siansxint.sniper.checker.model.LastCheck;
 import me.siansxint.sniper.checker.model.NameDropTime;
 import me.siansxint.sniper.common.registry.LocalTRegistry;
 import me.siansxint.sniper.common.registry.TRegistry;
-import me.siansxint.sniper.common.storage.TStorage;
 import team.unnamed.inject.AbstractModule;
 import team.unnamed.inject.Module;
 import team.unnamed.inject.Provides;
@@ -30,11 +29,7 @@ public class NamesModule extends AbstractModule implements Module {
 
     @Provides
     @Singleton
-    public TRegistry<LastCheck> lastChecks(TStorage<LastCheck> lastCheckStorage) {
-        TRegistry<LastCheck> lastChecks = new LocalTRegistry<>();
-        lastCheckStorage.findAll()
-                .join()
-                .forEach(lastChecks::register);
-        return lastChecks;
+    public TRegistry<LastCheck> lastChecks() {
+        return new LocalTRegistry<>();
     }
 }
