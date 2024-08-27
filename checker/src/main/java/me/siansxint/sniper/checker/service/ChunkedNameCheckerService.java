@@ -3,6 +3,7 @@ package me.siansxint.sniper.checker.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.siansxint.sniper.checker.Requests;
 import me.siansxint.sniper.checker.TCachedStorage;
 import me.siansxint.sniper.checker.config.Configuration;
 import me.siansxint.sniper.checker.model.LastCheck;
@@ -12,14 +13,12 @@ import me.siansxint.sniper.common.ConsoleColors;
 import me.siansxint.sniper.common.Service;
 import me.siansxint.sniper.common.http.HttpClientSelector;
 import me.siansxint.sniper.common.registry.TRegistry;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.Named;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,7 +46,8 @@ public class ChunkedNameCheckerService implements Service {
     private @Inject TCachedStorage<LastCheck> lastChecksStorage;
     private @Inject List<String> names;
 
-    private @Inject @Named("checker") ExecutorService checkerService;
+    private @Inject
+    @Named("checker") ExecutorService checkerService;
 
     private @Inject Configuration configuration;
     private @Inject ObjectMapper mapper;
@@ -137,39 +137,29 @@ public class ChunkedNameCheckerService implements Service {
                                             Configuration configuration,
                                             ObjectMapper mapper) {
         while (true) {
-            HttpClient client = selector.next();
-            HttpRequest request;
+            Requests.HttpResponse response;
             try {
-                request = HttpRequest.newBuilder(USERNAME_BULK_FIND_URI)
-                        .header("Content-Type", "application/json")
-                        .header("User-Agent", "test")
-                        .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(chunk)))
-                        .build();
+                response = Requests.post(
+                        new StringEntity(mapper.writeValueAsString(chunk), ContentType.APPLICATION_JSON),
+                        selector,
+                        USERNAME_BULK_FIND_URI,
+                        logger
+                );
             } catch (JsonProcessingException e) {
                 logger.log(
                         Level.WARNING,
-                        "An error occurred while building request body...",
+                        "An error occurred while serializing chunk data...",
                         e
                 );
                 continue;
             }
 
-            HttpResponse<String> response;
-            try {
-                response = client.send(
-                        request,
-                        HttpResponse.BodyHandlers.ofString()
-                );
-            } catch (IOException | InterruptedException e) {
-                logger.log(
-                        Level.WARNING,
-                        "An error occurred while sending name check request...",
-                        e
-                );
+            if (response == null) {
+                logger.warning("Got no HTTP response...");
                 continue;
             }
 
-            if (response.statusCode() == 200) {
+            if (response.status() == 200) {
                 Instant now = Instant.now();
 
                 List<UsernamesBulkResponse> responses;
@@ -198,7 +188,7 @@ public class ChunkedNameCheckerService implements Service {
                 return chunk.stream()
                         .filter(s -> !taken.contains(s))
                         .collect(Collectors.toSet());
-            } else if (response.statusCode() == 429) {
+            } else if (response.status() == 429) {
                 logger.info("Got rate-limited. Waiting " + configuration.rateLimitDelay() + "ms.");
                 try {
                     TimeUnit.MILLISECONDS.sleep(configuration.rateLimitDelay());

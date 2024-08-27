@@ -23,6 +23,8 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.0.16")
 
     implementation("team.unnamed:inject:2.0.1")
+
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.3.1")
 }
 
 tasks {

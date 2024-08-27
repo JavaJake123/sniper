@@ -1,13 +1,15 @@
 package me.siansxint.sniper.common.http;
 
-import java.net.http.HttpClient;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+
 import java.util.List;
 import java.util.Random;
 
 public class HttpClientSelector {
 
     private static final Random RANDOM = new Random();
-    private static final HttpClient DEFAULT_CLIENT = HttpClient.newHttpClient();
+    private static final HttpClient DEFAULT_HTTP_CLIENT = HttpClients.createDefault();
 
     private final List<HttpClient> clients;
 
@@ -15,12 +17,8 @@ public class HttpClientSelector {
         this.clients = clients;
     }
 
-    public synchronized HttpClient next() {
+    public HttpClient next() {
         HttpClient client = clients.size() == 1 ? clients.getFirst() : clients.get(RANDOM.nextInt(clients.size()));
-        if (client == null) {
-            return DEFAULT_CLIENT;
-        }
-
-        return client;
+        return client == null ? DEFAULT_HTTP_CLIENT : client;
     }
 }
