@@ -62,7 +62,7 @@ public class ChunkedNameCheckerService implements Service {
                 .name("Chunked Name Checker Service")
                 .start(
                         () -> {
-                            while (!names.isEmpty()) {
+                            while (!checkerService.isTerminated()) {
                                 Collection<Collection<String>> chunks = chunkNames();
                                 logger.info("Chunks to process: " + chunks.size());
 
