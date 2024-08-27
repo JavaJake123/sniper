@@ -3,6 +3,7 @@ package me.siansxint.sniper.checker.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.siansxint.sniper.checker.TCachedStorage;
 import me.siansxint.sniper.checker.config.Configuration;
 import me.siansxint.sniper.checker.model.LastCheck;
 import me.siansxint.sniper.checker.model.NameDropTime;
@@ -43,10 +44,10 @@ public class ChunkedNameCheckerService implements Service {
 
     private @Inject TRegistry<NameDropTime> dropTimes;
     private @Inject TRegistry<LastCheck> lastChecks;
+    private @Inject TCachedStorage<LastCheck> lastChecksStorage;
     private @Inject List<String> names;
 
-    private @Inject
-    @Named("checker") ExecutorService checkerService;
+    private @Inject @Named("checker") ExecutorService checkerService;
 
     private @Inject Configuration configuration;
     private @Inject ObjectMapper mapper;
@@ -86,7 +87,7 @@ public class ChunkedNameCheckerService implements Service {
                                                 Instant now = Instant.now();
 
                                                 for (String name : available) {
-                                                    LastCheck check = lastChecks.remove(name);
+                                                    LastCheck check = lastChecksStorage.remove(name);
                                                     dropTimes.register(new NameDropTime(
                                                             name,
                                                             Instant.ofEpochMilli(

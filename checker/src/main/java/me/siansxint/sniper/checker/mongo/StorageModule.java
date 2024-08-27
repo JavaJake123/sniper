@@ -1,8 +1,10 @@
 package me.siansxint.sniper.checker.mongo;
 
 import com.mongodb.client.MongoClient;
+import me.siansxint.sniper.checker.TCachedStorage;
 import me.siansxint.sniper.checker.model.LastCheck;
 import me.siansxint.sniper.checker.model.NameDropTime;
+import me.siansxint.sniper.common.registry.TRegistry;
 import me.siansxint.sniper.common.storage.MongoTStorage;
 import me.siansxint.sniper.common.storage.TStorage;
 import team.unnamed.inject.*;
@@ -36,5 +38,11 @@ public class StorageModule extends AbstractModule implements Module {
                 client,
                 service
         );
+    }
+
+    @Provides
+    @Singleton
+    public TCachedStorage<LastCheck> lastChecksCachedStorage(TRegistry<LastCheck> registry, TStorage<LastCheck> storage) {
+        return new TCachedStorage<>(registry, storage);
     }
 }

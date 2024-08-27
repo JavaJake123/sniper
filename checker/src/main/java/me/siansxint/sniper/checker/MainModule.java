@@ -35,9 +35,9 @@ public class MainModule extends AbstractModule implements Module {
         install(new ExecutorModule());
         install(new ObjectMapperModule());
         install(new MongoConnectionModule());
+        install(new NamesModule());
         install(new StorageModule());
         install(new HttpModule());
-        install(new NamesModule());
 
         multibind(Service.class)
                 .asCollection(HashSet::new)
@@ -62,9 +62,9 @@ public class MainModule extends AbstractModule implements Module {
             );
 
             Configuration configuration = new Configuration(
-                    3,
+                    20,
                     5000,
-                    20000,
+                    30000,
                     "mongodb://localhost:27017"
             );
             try (Writer writer = new BufferedWriter(new FileWriter(config))) {
