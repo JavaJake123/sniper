@@ -31,6 +31,7 @@ public class DropTimesUploadService implements Service {
         long interval = configuration.savingInterval();
         scheduledExecutorService.scheduleAtFixedRate(
                 () -> {
+                    // here we should check if the name is banned
                     Iterator<NameDropTime> iterator = dropTimeRegistry.iterator();
                     while (iterator.hasNext()) {
                         NameDropTime dropTime = iterator.next();

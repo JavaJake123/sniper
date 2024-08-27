@@ -77,6 +77,8 @@ public class ChunkedNameCheckerService implements Service {
                                                     ), checkerService
                                             )
                                             .whenComplete((available, throwable) -> {
+                                                latch.countDown();
+
                                                 if (throwable != null || available.isEmpty()) {
                                                     return;
                                                 }
@@ -102,8 +104,6 @@ public class ChunkedNameCheckerService implements Service {
                                                             "New name detected as available: " + name + ", at: " + now.toString())
                                                     );
                                                 }
-
-                                                latch.countDown();
                                             });
                                 }
 
@@ -116,6 +116,9 @@ public class ChunkedNameCheckerService implements Service {
                                             e
                                     );
                                 }
+
+                                logger.info(ConsoleColors.resetting(ConsoleColors.PURPLE, "Finished processing " + chunks.size() + " chunks!"));
+                                SUCCESSFUL_REQUESTS.set(0);
                             }
                         }
                 );
