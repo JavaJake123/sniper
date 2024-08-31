@@ -1,6 +1,5 @@
 package me.siansxint.sniper.checker.service;
 
-import me.siansxint.sniper.common.Files;
 import me.siansxint.sniper.common.Service;
 import team.unnamed.inject.Inject;
 
@@ -8,19 +7,19 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NamesService implements Service {
 
     private @Inject List<String> names;
 
+    private @Inject Logger logger;
+
     @Override
-    public void start() {
-        names.addAll(new HashSet<>(Files.loadTextFile(new File("names.txt")))); // this collection is synchronized, actually needed???
-    }
+    public void start() {}
 
     @Override
     public void stop() {
@@ -33,8 +32,14 @@ public class NamesService implements Service {
                     writer.write(names.get(i) + "\n");
                 }
             }
+
+            logger.info("Saved names!");
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            logger.log(
+                    Level.WARNING,
+                    "An error occurred while saving names...",
+                    e
+            );
         }
     }
 }
