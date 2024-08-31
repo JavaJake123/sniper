@@ -4,27 +4,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import me.siansxint.sniper.common.Identity;
 
 import java.beans.ConstructorProperties;
-import java.time.Instant;
 import java.util.Objects;
 
 public final class LastCheck implements Identity {
 
     private final String id;
-    private final @JsonProperty("when") Instant when;
+    private final @JsonProperty("when") long when;
 
     @ConstructorProperties({"_id", "when"})
-    public LastCheck(String id, Instant when) {
+    public LastCheck(String id, long when) {
         this.id = id;
         this.when = when;
-    }
-
-    public Instant when() {
-        return when;
     }
 
     @Override
     public String id() {
         return id;
+    }
+
+    public long when() {
+        return when;
     }
 
     @Override

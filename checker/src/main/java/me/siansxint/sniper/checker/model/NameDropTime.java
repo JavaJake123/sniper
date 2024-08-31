@@ -4,19 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import me.siansxint.sniper.common.Identity;
 
 import java.beans.ConstructorProperties;
-import java.time.Instant;
 import java.util.Objects;
 
 public final class NameDropTime implements Identity {
 
     private final String id;
 
-    private final @JsonProperty("from") Instant from;
-    private final @JsonProperty("to") Instant to;
-
+    private final @JsonProperty("from") long from;
+    private final @JsonProperty("to") long to;
 
     @ConstructorProperties({"_id", "from", "to"})
-    public NameDropTime(String id, Instant from, Instant to) {
+    public NameDropTime(String id, long from, long to) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -27,11 +25,11 @@ public final class NameDropTime implements Identity {
         return id;
     }
 
-    public Instant from() {
+    public long from() {
         return from;
     }
 
-    public Instant to() {
+    public long to() {
         return to;
     }
 
