@@ -7,8 +7,7 @@ import me.siansxint.sniper.checker.http.HttpModule;
 import me.siansxint.sniper.checker.mongo.MongoConnectionModule;
 import me.siansxint.sniper.checker.mongo.StorageModule;
 import me.siansxint.sniper.checker.service.ChunkedNameCheckerService;
-import me.siansxint.sniper.checker.service.DropTimesUploadService;
-import me.siansxint.sniper.checker.service.LastChecksUploadService;
+import me.siansxint.sniper.checker.service.DropTimeSanitizerService;
 import me.siansxint.sniper.checker.service.NamesService;
 import me.siansxint.sniper.common.logger.LoggerModule;
 import me.siansxint.sniper.common.mapper.ObjectMapperModule;
@@ -42,8 +41,7 @@ public class MainModule extends AbstractModule implements Module {
         multibind(Service.class)
                 .asCollection(HashSet::new)
                 .to(NamesService.class)
-                .to(DropTimesUploadService.class)
-                .to(LastChecksUploadService.class)
+                .to(DropTimeSanitizerService.class)
                 .to(ChunkedNameCheckerService.class)
                 .singleton();
     }
@@ -62,9 +60,11 @@ public class MainModule extends AbstractModule implements Module {
             );
 
             Configuration configuration = new Configuration(
-                    20,
+                    -1,
+                    5,
                     5000,
-                    30000,
+                    10000,
+                    50000,
                     "mongodb://localhost:27017"
             );
             try (Writer writer = new BufferedWriter(new FileWriter(config))) {
