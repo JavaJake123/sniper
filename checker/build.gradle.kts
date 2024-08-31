@@ -15,7 +15,6 @@ dependencies {
     implementation(project(":common"))
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
 
     implementation("org.mongodb:mongodb-driver-sync:5.1.3")
     implementation("com.github.Solotory:mongo-jackson-codec:1.0.0")
