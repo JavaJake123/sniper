@@ -34,6 +34,11 @@ public class LocalTRegistry<T extends Identity> implements TRegistry<T> {
     }
 
     @Override
+    public int size() {
+        return cached.size();
+    }
+
+    @Override
     public boolean empty() {
         return cached.isEmpty();
     }

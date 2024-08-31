@@ -1,25 +1,26 @@
 package me.siansxint.sniper.checker;
 
-import me.siansxint.sniper.common.Identity;
+import me.siansxint.sniper.checker.model.LastCheck;
 import me.siansxint.sniper.common.registry.TRegistry;
 import me.siansxint.sniper.common.storage.TStorage;
 
 import java.util.Iterator;
 import java.util.Map;
 
-public class TCachedStorage<T extends Identity> implements TRegistry<T> {
+// this should be using redis fr
+public class LastCheckCachedStorage implements TRegistry<LastCheck> {
 
-    private final TRegistry<T> registry;
-    private final TStorage<T> storage;
+    private final TRegistry<LastCheck> registry;
+    private final TStorage<LastCheck> storage;
 
-    public TCachedStorage(TRegistry<T> registry, TStorage<T> storage) {
+    public LastCheckCachedStorage(TRegistry<LastCheck> registry, TStorage<LastCheck> storage) {
         this.registry = registry;
         this.storage = storage;
     }
 
     @Override
-    public T get(String id) {
-        T model = registry.get(id);
+    public LastCheck get(String id) {
+        LastCheck model = registry.get(id);
         if (model == null) {
             model = storage.findSync(id);
         }
@@ -28,14 +29,14 @@ public class TCachedStorage<T extends Identity> implements TRegistry<T> {
     }
 
     @Override
-    public void register(T value) {
+    public void register(LastCheck value) {
         registry.register(value);
         storage.save(value);
     }
 
     @Override
-    public T remove(String id) {
-        T model = registry.remove(id);
+    public LastCheck remove(String id) {
+        LastCheck model = registry.remove(id);
         if (model == null) {
             storage.findSync(id);
         }
@@ -51,18 +52,23 @@ public class TCachedStorage<T extends Identity> implements TRegistry<T> {
     }
 
     @Override
+    public int size() {
+        return registry.size();
+    }
+
+    @Override
     public boolean empty() {
         return registry.empty();
     }
 
     @Override
-    public Map<String, T> copy() {
+    public Map<String, LastCheck> copy() {
         return registry.copy();
     }
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<LastCheck> iterator() {
         return registry.iterator();
     }
 }

@@ -14,6 +14,8 @@ public interface TRegistry<T extends Identity> extends Iterable<T> {
 
     long clear();
 
+    int size();
+
     boolean empty();
 
     Map<String, T> copy();
