@@ -1,9 +1,13 @@
 package me.siansxint.sniper.checker.executor;
 
 import me.siansxint.sniper.checker.config.Configuration;
+import me.siansxint.sniper.common.http.HttpClientSelector;
 import me.siansxint.sniper.common.thread.NamedVirtualThreadFactory;
-import team.unnamed.inject.*;
+import team.unnamed.inject.AbstractModule;
 import team.unnamed.inject.Module;
+import team.unnamed.inject.Named;
+import team.unnamed.inject.Provides;
+import team.unnamed.inject.Singleton;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,9 +18,9 @@ public class ExecutorModule extends AbstractModule implements Module {
     @Provides
     @Singleton
     @Named("checker")
-    public ExecutorService checkerExecutorService(Configuration configuration) {
+    public ExecutorService checkerExecutorService(Configuration configuration, HttpClientSelector selector) {
         return Executors.newFixedThreadPool(
-                configuration.poolSize(),
+                configuration.poolSize() == -1 ? selector.size() : configuration.poolSize(),
                 new NamedVirtualThreadFactory(Thread.ofVirtual().factory())
         );
     }
@@ -31,6 +35,6 @@ public class ExecutorModule extends AbstractModule implements Module {
     @Provides
     @Singleton
     public ScheduledExecutorService scheduledExecutorService() {
-        return Executors.newScheduledThreadPool(2);
+        return Executors.newScheduledThreadPool(1);
     }
 }
