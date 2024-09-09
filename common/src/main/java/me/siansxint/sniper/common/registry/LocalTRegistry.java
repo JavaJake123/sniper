@@ -2,14 +2,13 @@ package me.siansxint.sniper.common.registry;
 
 import me.siansxint.sniper.common.Identity;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LocalTRegistry<T extends Identity> implements TRegistry<T> {
 
-    private final Map<String, T> cached = Collections.synchronizedMap(new ConcurrentHashMap<>());
+    private final Map<String, T> cached = new ConcurrentHashMap<>();
 
     @Override
     public T get(String id) {

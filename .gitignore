@@ -30,3 +30,5 @@ target/
 
 # Ignore Gradle build output directory
 build
+accounts.txt
+proxies.txt

@@ -1,4 +1,4 @@
-package me.siansxint.sniper.checker.mongo;
+package me.siansxint.sniper.claimer.mongo;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.Indexes;

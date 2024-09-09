@@ -1,8 +1,6 @@
 {
-  "poolSize": -1,
+  "poolSize": 1,
   "maxRetries": 3,
   "retryDelay": 3000,
-  "rateLimitedDelay": 10000,
-  "savingInterval": 50000,
   "mongoUri": "mongodb://localhost:27017"
 }

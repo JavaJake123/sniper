@@ -1,6 +1,6 @@
 package me.siansxint.sniper.checker;
 
-import me.siansxint.sniper.checker.model.NameDropTime;
+import me.siansxint.sniper.common.NameDropTime;
 import me.siansxint.sniper.common.Files;
 import me.siansxint.sniper.common.registry.LocalTRegistry;
 import me.siansxint.sniper.common.registry.TRegistry;
@@ -11,6 +11,8 @@ import team.unnamed.inject.Provides;
 import team.unnamed.inject.Singleton;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,7 +24,15 @@ public class NamesModule extends AbstractModule implements Module {
     @Provides
     @Singleton
     public List<String> names(TStorage<NameDropTime> dropTimes) {
-        Set<String> names = new HashSet<>(Files.loadTextFile(new File("names.txt")));
+        Set<String> names;
+        try {
+            names = new HashSet<>(Files.loadTextFile(new File("names.txt")));
+        } catch (IOException e) {
+            throw new UncheckedIOException(
+                    "Failed to load 'names.txt' file!",
+                    e
+            );
+        }
         // remove already dropping names, this could be necessary when names file is not updated when finishing the program
         dropTimes.findAll()
                 .join()

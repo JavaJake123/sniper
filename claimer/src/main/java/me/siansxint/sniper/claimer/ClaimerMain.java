@@ -1,63 +1,51 @@
 package me.siansxint.sniper.claimer;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.io.Writer;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import me.siansxint.sniper.common.Service;
+import sun.misc.Signal;
+import team.unnamed.inject.Inject;
+import team.unnamed.inject.Injector;
 
-// testing purposes just by now
-public class ClaimerMain {
+import java.util.Collection;
+import java.util.Scanner;
 
-    private static final char[] CHARS = "abcdefghijklmnopqrstuvwxyz_0123456789".toCharArray();
+public class ClaimerMain implements Service {
 
-    public static void main1(String[] args) {
-        String[] combinations = new String[50653];
+    private @Inject Collection<Service> services;
 
-        int index = 0;
-        for (char i : CHARS) {
-            for (char j : CHARS) {
-                for (char k : CHARS) {
-                    System.out.println(index);
-                    combinations[index++] = "" + i + j + k;
-                }
-            }
+    @Override
+    public void start() {
+        Injector.create(new MainModule())
+                .injectMembers(this);
+
+        for (Service service : services) {
+            service.start();
         }
 
-        try (Writer writer = new BufferedWriter(new FileWriter("names.txt"))) {
-            for (int i = 0; i < combinations.length; i++) {
-                if (i == combinations.length - 1) {
-                    writer.write(combinations[i]);
-                } else {
-                    writer.write(combinations[i] + "\n");
-                }
+        Signal.handle(new Signal("INT"),
+                signal -> stop());
+
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            if (!scanner.next().equalsIgnoreCase("exit")) {
+                System.out.println("If you want to exit, type 'exit'.");
+                continue;
             }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+
+            stop();
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        long start = System.nanoTime();
-        Instant from = Instant.ofEpochSecond((long) 1724974437.8757012);
-        Instant to = Instant.ofEpochSecond((long) 1724980298.33745);
+    @Override
+    public void stop() {
+        for (Service service : services) {
+            service.stop();
+        }
 
-        ZoneId zoneId = ZoneId.of("GMT-4");
+        System.exit(0);
+    }
 
-        System.out.println(from);
-        System.out.println(to);
-
-        Thread.sleep(10000);
-
-        System.out.println(from.plus(37, ChronoUnit.DAYS).atZone(zoneId).toLocalDateTime());
-        System.out.println(to.plus(37, ChronoUnit.DAYS).atZone(zoneId).toLocalDateTime());
-
-        System.out.println(TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - start));
+    public static void main(String[] args) {
+        ClaimerMain application = new ClaimerMain();
+        application.start();
     }
 }

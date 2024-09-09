@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.siansxint.sniper.checker.config.Configuration;
 import me.siansxint.sniper.checker.model.LastCheck;
-import me.siansxint.sniper.checker.model.NameDropTime;
+import me.siansxint.sniper.common.NameDropTime;
 import me.siansxint.sniper.checker.model.UsernamesBulkResponse;
 import me.siansxint.sniper.common.ConsoleColors;
 import me.siansxint.sniper.common.HttpResponse;

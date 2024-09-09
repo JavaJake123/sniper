@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.siansxint.sniper.checker.ChunkProcessorTask;
 import me.siansxint.sniper.checker.LastCheckCachedStorage;
 import me.siansxint.sniper.checker.config.Configuration;
-import me.siansxint.sniper.checker.model.NameDropTime;
+import me.siansxint.sniper.common.NameDropTime;
 import me.siansxint.sniper.common.ConsoleColors;
+import me.siansxint.sniper.common.ReadableTimes;
 import me.siansxint.sniper.common.Service;
 import me.siansxint.sniper.common.http.HttpClientSelector;
 import me.siansxint.sniper.common.registry.TRegistry;
@@ -53,7 +54,7 @@ public class ChunkedNameCheckerService implements Service {
                         CountDownLatch latch = new CountDownLatch(chunks.size());
 
                         Instant startedAt = Instant.now();
-                        long start = System.nanoTime();
+                        long start = System.currentTimeMillis();
 
                         for (Collection<String> chunk : chunks) {
                             checkerService.submit(new ChunkProcessorTask(
@@ -79,7 +80,7 @@ public class ChunkedNameCheckerService implements Service {
                             );
                         }
 
-                        logger.info(ConsoleColors.resetting(ConsoleColors.PURPLE, "Finished processing " + chunks.size() + " chunks! Took " + TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - start) + " seconds."));
+                        logger.info(ConsoleColors.resetting(ConsoleColors.PURPLE, "Finished processing " + chunks.size() + " chunks! Took " + ReadableTimes.durationToHumanTime(System.currentTimeMillis() - start) + " seconds."));
                         ChunkProcessorTask.SUCCESSFUL_REQUESTS.set(0);
                     }
                 });

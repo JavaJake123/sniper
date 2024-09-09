@@ -15,8 +15,6 @@ dependencies {
 
     compileOnly("com.fasterxml.jackson.core:jackson-databind:2.17.2")
 
-    compileOnly("com.github.Solotory:mongo-jackson-codec:1.0.0")
-
     compileOnly("team.unnamed:inject:2.0.1")
 
     compileOnly("org.apache.httpcomponents.client5:httpclient5:5.3.1")

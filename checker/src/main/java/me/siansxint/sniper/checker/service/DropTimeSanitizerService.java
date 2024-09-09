@@ -1,7 +1,7 @@
 package me.siansxint.sniper.checker.service;
 
 import me.siansxint.sniper.checker.config.Configuration;
-import me.siansxint.sniper.checker.model.NameDropTime;
+import me.siansxint.sniper.common.NameDropTime;
 import me.siansxint.sniper.common.ConsoleColors;
 import me.siansxint.sniper.common.Service;
 import me.siansxint.sniper.common.registry.TRegistry;

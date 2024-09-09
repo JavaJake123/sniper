@@ -1,7 +1,6 @@
-package me.siansxint.sniper.checker.model;
+package me.siansxint.sniper.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import me.siansxint.sniper.common.Identity;
 
 import java.beans.ConstructorProperties;
 import java.util.Objects;
