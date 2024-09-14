@@ -1,7 +1,6 @@
 package me.siansxint.sniper.claimer;
 
 import me.siansxint.sniper.common.Service;
-import sun.misc.Signal;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.Injector;
 
@@ -21,8 +20,8 @@ public class ClaimerMain implements Service {
             service.start();
         }
 
-        Signal.handle(new Signal("INT"),
-                signal -> stop());
+        // this won't always work, anyway, is not recommended to shut down the program with CTRL + C
+        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()) {
@@ -40,8 +39,6 @@ public class ClaimerMain implements Service {
         for (Service service : services) {
             service.stop();
         }
-
-        System.exit(0);
     }
 
     public static void main(String[] args) {

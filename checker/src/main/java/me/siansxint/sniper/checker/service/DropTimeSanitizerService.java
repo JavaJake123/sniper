@@ -69,7 +69,7 @@ public class DropTimeSanitizerService implements Service {
         if (task != null) {
             task.run();
 
-            logger.info("Saved all pendent drop-times!");
+            System.out.println("Saved all pendent drop-times!");
         }
     }
 }

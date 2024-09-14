@@ -8,6 +8,7 @@ import me.siansxint.sniper.checker.mongo.MongoConnectionModule;
 import me.siansxint.sniper.checker.mongo.StorageModule;
 import me.siansxint.sniper.checker.service.ChunkedNameCheckerService;
 import me.siansxint.sniper.checker.service.DropTimeSanitizerService;
+import me.siansxint.sniper.checker.service.ExecutorShutdownService;
 import me.siansxint.sniper.checker.service.NamesService;
 import me.siansxint.sniper.common.logger.LoggerModule;
 import me.siansxint.sniper.common.mapper.ObjectMapperModule;
@@ -43,6 +44,7 @@ public class MainModule extends AbstractModule implements Module {
                 .to(NamesService.class)
                 .to(DropTimeSanitizerService.class)
                 .to(ChunkedNameCheckerService.class)
+                .to(ExecutorShutdownService.class)
                 .singleton();
     }
 

@@ -11,7 +11,6 @@ import me.siansxint.sniper.common.Service;
 import me.siansxint.sniper.common.http.HttpClientSelector;
 import me.siansxint.sniper.common.registry.TRegistry;
 import team.unnamed.inject.Inject;
-import team.unnamed.inject.Named;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,9 +31,7 @@ public class ChunkedNameCheckerService implements Service {
     private @Inject LastCheckCachedStorage lastChecks;
     private @Inject List<String> names;
 
-    @Inject
-    @Named("checker")
-    private ExecutorService checkerService;
+    private @Inject ExecutorService checkerService;
 
     private @Inject ObjectMapper mapper;
     private @Inject Configuration configuration;

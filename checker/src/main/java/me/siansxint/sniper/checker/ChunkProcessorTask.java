@@ -8,15 +8,14 @@ import me.siansxint.sniper.checker.model.LastCheck;
 import me.siansxint.sniper.common.NameDropTime;
 import me.siansxint.sniper.checker.model.UsernamesBulkResponse;
 import me.siansxint.sniper.common.ConsoleColors;
-import me.siansxint.sniper.common.HttpResponse;
+import me.siansxint.sniper.common.http.HttpResponse;
+import me.siansxint.sniper.common.http.HttpResponseHandlers;
 import me.siansxint.sniper.common.registry.TRegistry;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
-import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpStatus;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicHeader;
 
@@ -102,13 +101,7 @@ public class ChunkProcessorTask implements Runnable {
 
                 HttpResponse response = client.execute(
                         request,
-                        data -> {
-                            HttpEntity entity = data.getEntity();
-                            return new HttpResponse(
-                                    data.getCode(),
-                                    entity == null ? "{}" : EntityUtils.toString(entity)
-                            );
-                        }
+                        HttpResponseHandlers.RESPONSE_HANDLER
                 );
 
                 if (response == null || response.result() == null) {

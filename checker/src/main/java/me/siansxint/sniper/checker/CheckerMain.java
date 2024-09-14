@@ -1,7 +1,6 @@
 package me.siansxint.sniper.checker;
 
 import me.siansxint.sniper.common.Service;
-import sun.misc.Signal;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.Injector;
 
@@ -21,8 +20,7 @@ public class CheckerMain implements Service {
             service.start();
         }
 
-        Signal.handle(new Signal("INT"),
-                signal -> stop());
+        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()) {
@@ -32,6 +30,7 @@ public class CheckerMain implements Service {
             }
 
             stop();
+            System.exit(0);
         }
     }
 
@@ -40,8 +39,6 @@ public class CheckerMain implements Service {
         for (Service service : services) {
             service.stop();
         }
-
-        System.exit(0);
     }
 
     public static void main(String[] args) {

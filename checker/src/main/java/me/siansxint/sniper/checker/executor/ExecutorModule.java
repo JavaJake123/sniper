@@ -17,7 +17,6 @@ public class ExecutorModule extends AbstractModule implements Module {
 
     @Provides
     @Singleton
-    @Named("checker")
     public ExecutorService checkerExecutorService(Configuration configuration, HttpClientSelector selector) {
         return Executors.newFixedThreadPool(
                 configuration.poolSize() == -1 ? selector.size() : configuration.poolSize(),

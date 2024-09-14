@@ -1,6 +1,8 @@
 package me.siansxint.sniper.claimer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.siansxint.sniper.claimer.account.AccountModule;
+import me.siansxint.sniper.claimer.account.AccountService;
 import me.siansxint.sniper.claimer.config.Configuration;
 import me.siansxint.sniper.claimer.executor.ExecutorModule;
 import me.siansxint.sniper.claimer.http.HttpModule;
@@ -33,7 +35,9 @@ public class MainModule extends AbstractModule implements Module {
         install(new AccountModule());
         multibind(Service.class)
                 .asCollection(HashSet::new)
+                .to(AccountService.class)
                 .to(ClaimerService.class)
+                .to(ExecutorShutdownService.class)
                 .singleton();
     }
 
